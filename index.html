@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>kitalev's Repo — Cydia</title>
+<title id="pageTitle">kitalev's Repo — Cydia</title>
 <style>
   :root{
     --linen:#e7e2d6;
@@ -33,63 +33,52 @@
     min-height:100%;
   }
 
-  .wrap{ max-width:520px; margin:0 auto; padding:28px 16px 60px; }
+  .wrap{ max-width:520px; margin:0 auto; padding:20px 16px 60px; }
 
-  /* ---- Header ---- */
+  .lang-toggle{ display:flex; justify-content:center; gap:6px; margin-bottom:18px; }
+  .lang-btn{
+    padding:5px 14px; border-radius:7px; font-size:12.5px; font-weight:700;
+    letter-spacing:0.02em; border:1px solid rgba(0,0,0,0.15);
+    background:rgba(255,255,255,0.5); color:var(--navy-soft); cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .lang-btn.active{ background:var(--navy); color:#fff; border-color:var(--navy); }
+
   header{ text-align:center; margin-bottom:22px; }
 
   .icon{
-    width:90px; height:90px; border-radius:20px;
-    margin:0 auto 14px;
+    width:90px; height:90px; border-radius:20px; margin:0 auto 14px;
     display:flex; align-items:center; justify-content:center;
     background:linear-gradient(180deg,#7fb6ff,#2f66c9);
     box-shadow:
       0 1px 0 rgba(255,255,255,0.6) inset,
       0 -6px 10px rgba(0,0,0,0.18) inset,
       0 6px 14px rgba(0,0,0,0.35);
-    border:1px solid #1a3f86;
-    overflow:hidden;
+    border:1px solid #1a3f86; overflow:hidden;
   }
   .icon img{ width:100%; height:100%; object-fit:cover; }
   .icon svg{ width:52px; height:52px; }
 
-  h1{
-    font-size:26px; font-weight:700; margin:0 0 4px;
-    text-shadow:0 1px 0 rgba(255,255,255,0.5);
-    letter-spacing:-0.01em;
-  }
-  .tagline{
-    font-size:14px; color:var(--navy-soft); margin:0 auto; max-width:360px;
-    line-height:1.4;
-  }
+  h1{ font-size:26px; font-weight:700; margin:0 0 4px; text-shadow:0 1px 0 rgba(255,255,255,0.5); letter-spacing:-0.01em; }
+  .tagline{ font-size:14px; color:var(--navy-soft); margin:0 auto; max-width:360px; line-height:1.4; }
 
-  /* ---- Glossy button (signature element) ---- */
   .btn{
     display:flex; align-items:center; justify-content:center; gap:8px;
-    width:100%; text-align:center;
-    padding:13px 18px;
-    border-radius:11px;
-    font-size:17px; font-weight:600;
-    text-decoration:none;
-    color:#fff;
-    text-shadow:0 -1px 0 rgba(0,0,0,0.35);
-    border:1px solid var(--blue-edge);
+    width:100%; text-align:center; padding:13px 18px; border-radius:11px;
+    font-size:17px; font-weight:600; text-decoration:none; color:#fff;
+    text-shadow:0 -1px 0 rgba(0,0,0,0.35); border:1px solid var(--blue-edge);
     background:linear-gradient(180deg, var(--blue-top) 0%, var(--blue-bottom) 100%);
     box-shadow:
       0 1px 0 rgba(255,255,255,0.55) inset,
       0 -10px 14px rgba(0,0,0,0.12) inset,
       0 3px 6px rgba(20,40,80,0.3);
-    position:relative;
-    overflow:hidden;
-    -webkit-user-select:none; user-select:none;
-    cursor:pointer;
+    position:relative; overflow:hidden;
+    -webkit-user-select:none; user-select:none; cursor:pointer;
   }
   .btn::after{
-    content:"";
-    position:absolute; top:0; left:0; right:0; height:50%;
+    content:""; position:absolute; top:0; left:0; right:0; height:50%;
     background:linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0));
-    border-radius:11px 11px 40% 40%/11px 11px 60% 60%;
-    pointer-events:none;
+    border-radius:11px 11px 40% 40%/11px 11px 60% 60%; pointer-events:none;
   }
   .btn:active{ filter:brightness(0.92); }
   .btn.green{
@@ -103,35 +92,20 @@
   }
 
   .add-block{ margin:20px 0 26px; }
-  .add-hint{
-    font-size:12px; color:var(--navy-soft); text-align:center;
-    margin-top:8px; line-height:1.4;
-  }
-  .add-hint code{
-    background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:4px;
-    font-size:11px;
-  }
+  .add-hint{ font-size:12px; color:var(--navy-soft); text-align:center; margin-top:8px; line-height:1.4; }
+  .add-hint code{ background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:4px; font-size:11px; }
 
-  /* ---- Section label ---- */
   .section-label{
-    font-size:12px; font-weight:700; text-transform:uppercase;
-    letter-spacing:0.06em; color:var(--navy-soft);
-    margin:26px 4px 8px;
+    font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--navy-soft); margin:26px 4px 8px;
   }
 
-  /* ---- List (native iOS grouped table view) ---- */
   .list{
-    background:var(--card);
-    border-radius:11px;
-    overflow:hidden;
+    background:var(--card); border-radius:11px; overflow:hidden;
     border:1px solid rgba(0,0,0,0.12);
     box-shadow:0 1px 0 rgba(255,255,255,0.6), 0 2px 6px rgba(0,0,0,0.08);
   }
-  .row{
-    display:flex; align-items:center; gap:12px;
-    padding:11px 14px;
-    border-bottom:1px solid var(--divider);
-  }
+  .row{ display:flex; align-items:center; gap:12px; padding:11px 14px; border-bottom:1px solid var(--divider); }
   .row:last-child{ border-bottom:none; }
 
   .pkg-icon{
@@ -139,8 +113,7 @@
     background:linear-gradient(180deg,#9aa7b5,#5c6b7d);
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 1px 0 rgba(255,255,255,0.4) inset, 0 1px 2px rgba(0,0,0,0.25);
-    color:#fff; font-weight:700; font-size:16px;
-    flex-shrink:0;
+    color:#fff; font-weight:700; font-size:16px; flex-shrink:0;
   }
 
   .pkg-info{ flex:1 1 auto; min-width:0; }
@@ -148,24 +121,22 @@
   .pkg-meta{ font-size:11.5px; color:var(--navy-soft); margin-top:1px; }
   .pkg-desc{
     font-size:12.5px; color:#5b6a78; margin-top:3px; line-height:1.35;
-    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
-    overflow:hidden;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
   }
 
-  .empty{
-    padding:28px 16px; text-align:center; color:var(--navy-soft); font-size:14px;
-    line-height:1.5;
-  }
+  .empty{ padding:28px 16px; text-align:center; color:var(--navy-soft); font-size:14px; line-height:1.5; }
 
-  footer{
-    text-align:center; margin-top:34px;
-    font-size:11.5px; color:#8a8674;
-  }
+  footer{ text-align:center; margin-top:34px; font-size:11.5px; color:#8a8674; }
   footer a{ color:#8a8674; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <div class="lang-toggle">
+    <button type="button" class="lang-btn" id="langEnBtn">EN</button>
+    <button type="button" class="lang-btn" id="langRuBtn">RU</button>
+  </div>
 
   <header>
     <div class="icon" id="repoIcon">
@@ -176,38 +147,92 @@
       </svg>
     </div>
     <h1 id="repoTitle">kitalev's Repo</h1>
-    <p class="tagline" id="repoDesc">Личный Cydia-репозиторий для iOS 6+. Здесь лежит GitHub Legacy и другие мои пакеты.</p>
+    <p class="tagline" id="repoDesc">Personal Cydia repository for iOS 6+. Home of GitHub Legacy and other packages.</p>
   </header>
 
   <div class="add-block">
     <a class="btn" id="addBtn" href="#">
-      <span>Добавить в Cydia</span>
+      <span id="addBtnText">Add to Cydia</span>
     </a>
-    <p class="add-hint">
-      Откройте эту страницу в <b>Safari</b> на джейлбрейкнутом iPhone и нажмите
-      кнопку — Cydia откроется и предложит добавить источник.<br>
-      Либо вручную: Cydia → Управление → Источники → Изменить → Добавить →
-      вставьте <code id="repoUrlText">…</code>
-    </p>
+    <p class="add-hint" id="addHint"></p>
   </div>
 
-  <div class="section-label" id="pkgCount">Пакеты</div>
+  <div class="section-label" id="pkgCount">Packages</div>
   <div class="list" id="pkgList">
-    <div class="empty">Загрузка списка пакетов…</div>
+    <div class="empty" id="loadingText">Loading package list…</div>
   </div>
 
-  <footer>kitalev · <a href="https://github.com/kitalev/repo">исходники репозитория</a></footer>
+  <footer><span id="footerBy">kitalev</span> · <a href="https://github.com/kitalev/repo" id="footerLink">repo source</a></footer>
 </div>
 
 <script>
 (function(){
-  // Базовый URL репозитория — вычисляется из адреса текущей страницы,
-  // ничего вручную прописывать не нужно.
+  var STRINGS = {
+    en: {
+      pageTitle: "kitalev's Repo — Cydia",
+      tagline: "Personal Cydia repository for iOS 6+. Home of GitHub Legacy and other packages.",
+      addBtn: "Add to Cydia",
+      addHintPrefix: 'Open this page in <b>Safari</b> on a jailbroken iPhone and tap the button — Cydia will open and offer to add the source.<br>Or manually: Cydia → Manage → Sources → Edit → Add → paste ',
+      packages: "Packages",
+      packagesCount: function(n){ return "Packages (" + n + ")"; },
+      loading: "Loading package list…",
+      emptyNoPkgJson: 'Could not load packages.json.<br>Run <code>generate.sh</code> in the repo.',
+      emptyNoPkgs: 'Nothing here yet.<br>Add a .deb to the debs/ folder and run generate.sh.',
+      download: "Download",
+      footerLink: "repo source",
+      noName: "Untitled",
+      sizeUnit: " KB"
+    },
+    ru: {
+      pageTitle: "kitalev's Repo — Cydia",
+      tagline: "Личный Cydia-репозиторий для iOS 6+. Здесь лежит GitHub Legacy и другие мои пакеты.",
+      addBtn: "Добавить в Cydia",
+      addHintPrefix: 'Откройте эту страницу в <b>Safari</b> на джейлбрейкнутом iPhone и нажмите кнопку — Cydia откроется и предложит добавить источник.<br>Либо вручную: Cydia → Управление → Источники → Изменить → Добавить → вставьте ',
+      packages: "Пакеты",
+      packagesCount: function(n){ return "Пакеты (" + n + ")"; },
+      loading: "Загрузка списка пакетов…",
+      emptyNoPkgJson: 'Не удалось загрузить packages.json.<br>Запустите <code>generate.sh</code> в репозитории.',
+      emptyNoPkgs: 'Пока здесь пусто.<br>Добавьте .deb в папку debs/ и запустите generate.sh.',
+      download: "Скачать",
+      footerLink: "исходники репозитория",
+      noName: "Без названия",
+      sizeUnit: " КБ"
+    }
+  };
+
+  var currentLang = localStorage.getItem('repoLang') || 'en';
+  var lastPkgs = null;
+
   var repoUrl = location.href.replace(/index\.html?(\?.*)?(#.*)?$/i, '');
   if (!repoUrl.endsWith('/')) repoUrl += '/';
-
-  document.getElementById('repoUrlText').textContent = repoUrl;
   document.getElementById('addBtn').href = 'cydia://url/' + repoUrl;
+
+  function applyLang(lang){
+    currentLang = lang;
+    localStorage.setItem('repoLang', lang);
+    var t = STRINGS[lang];
+
+    document.documentElement.lang = lang;
+    document.getElementById('pageTitle').textContent = t.pageTitle;
+    document.title = t.pageTitle;
+    document.getElementById('repoDesc').textContent = t.tagline;
+    document.getElementById('addBtnText').textContent = t.addBtn;
+    document.getElementById('addHint').innerHTML = t.addHintPrefix + '<code>' + repoUrl + '</code>';
+    document.getElementById('footerLink').textContent = t.footerLink;
+
+    document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
+    document.getElementById('langRuBtn').classList.toggle('active', lang === 'ru');
+
+    if (lastPkgs === null) {
+      document.getElementById('pkgCount').textContent = t.packages;
+      document.getElementById('pkgList').innerHTML = '<div class="empty">' + t.loading + '</div>';
+    } else {
+      renderPackages(lastPkgs);
+    }
+  }
+
+  document.getElementById('langEnBtn').addEventListener('click', function(){ applyLang('en'); });
+  document.getElementById('langRuBtn').addEventListener('click', function(){ applyLang('ru'); });
 
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, function(c){
@@ -223,30 +248,32 @@
 
   fetch('packages.json', { cache: 'no-store' })
     .then(function(r){ if(!r.ok) throw new Error('no packages.json'); return r.json(); })
-    .then(renderPackages)
+    .then(function(pkgs){ lastPkgs = pkgs; renderPackages(pkgs); })
     .catch(function(){
+      lastPkgs = [];
       document.getElementById('pkgList').innerHTML =
-        '<div class="empty">Не удалось загрузить packages.json.<br>Запустите <code>generate.sh</code> в репозитории.</div>';
+        '<div class="empty">' + STRINGS[currentLang].emptyNoPkgJson + '</div>';
     });
 
   function renderPackages(pkgs){
+    var t = STRINGS[currentLang];
     var listEl = document.getElementById('pkgList');
     var countEl = document.getElementById('pkgCount');
 
     if (!pkgs || !pkgs.length){
-      countEl.textContent = 'Пакеты';
-      listEl.innerHTML = '<div class="empty">Пока здесь пусто.<br>Добавьте .deb в папку debs/ и запустите generate.sh.</div>';
+      countEl.textContent = t.packages;
+      listEl.innerHTML = '<div class="empty">' + t.emptyNoPkgs + '</div>';
       return;
     }
 
-    countEl.textContent = 'Пакеты (' + pkgs.length + ')';
+    countEl.textContent = t.packagesCount(pkgs.length);
 
     listEl.innerHTML = pkgs.map(function(p){
-      var name = p.Name || p.Package || 'Без названия';
+      var name = p.Name || p.Package || t.noName;
       var version = p.Version || '';
       var desc = (p.Description || '').split('\n')[0];
       var filename = p.Filename || '';
-      var sizeKb = p.Size ? Math.max(1, Math.round(Number(p.Size)/1024)) + ' КБ' : '';
+      var sizeKb = p.Size ? Math.max(1, Math.round(Number(p.Size)/1024)) + t.sizeUnit : '';
 
       return (
         '<div class="row">' +
@@ -257,13 +284,15 @@
             (desc ? '<div class="pkg-desc">' + escapeHtml(desc) + '</div>' : '') +
           '</div>' +
           (filename
-            ? '<a class="btn green" href="' + encodeURI(filename) + '" download>Скачать</a>'
+            ? '<a class="btn green" href="' + encodeURI(filename) + '" download>' + t.download + '</a>'
             : ''
           ) +
         '</div>'
       );
     }).join('');
   }
+
+  applyLang(currentLang);
 })();
 </script>
 </body>
