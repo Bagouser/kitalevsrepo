@@ -1,99 +1,51 @@
-# Шаблон Cydia-репозитория (iOS 6)
+# kitalev's Repo
 
-Готовая структура для собственного APT-репозитория Cydia, размещаемого на GitHub Pages.
+![Platform](https://img.shields.io/badge/platform-iOS%206%2B-lightgrey)
+![Type](https://img.shields.io/badge/type-Cydia%2FSileo%20repo-blue)
+![Hosting](https://img.shields.io/badge/hosting-GitHub%20Pages-orange)
 
-## Структура
+**English** · [Русский](README.ru.md)
+
+---
+
+My personal Cydia/Sileo package repository for iOS 6+. Currently hosts [GitHub Legacy](https://github.com/kitalev/GitHub-Legacy), a lightweight native GitHub client for old iOS versions.
+
+**Repo URL:** `https://kitalev.github.io/repo/`
+
+## Add to Cydia/Sileo
+
+1. Open Cydia/Sileo → **Manage → Sources → Edit → Add**.
+2. Paste: `https://kitalev.github.io/repo/`
+3. Done — installed packages will show up in **Changes/Upgrade** automatically.
+
+Or, from Safari on the device itself, just open the [repo page](https://kitalev.github.io/repo/) and tap **"Добавить в Cydia"**.
+
+## Structure
 
 ```
-cydia-repo/
-├── debs/            ← сюда кладёте свои .deb пакеты
-├── generate.sh       ← скрипт, который строит Packages/Release/packages.json из debs/
-├── index.html          ← веб-страница репозитория (список пакетов + кнопка "Добавить в Cydia")
-├── Release            (появится после первого запуска generate.sh)
-├── Packages            "
-├── Packages.gz          "
-├── Packages.bz2           "
-├── packages.json          "  ← данные для index.html
-└── CydiaIcon.png     ← иконка репозитория (128×128 PNG), опционально
+repo/
+├── debs/            ← .deb packages
+├── generate.sh      ← rebuilds Packages/Release/packages.json from debs/
+├── index.html       ← the repo's landing page
+├── Release, Packages, Packages.gz, Packages.bz2, packages.json
+└── .github/workflows/sync-deb.yml  ← auto-syncs the latest .deb from GitHub-Legacy releases
 ```
 
-## Как использовать
+## Keeping it updated
 
-### 1. Добавьте пакеты
-Скопируйте свои `.deb` файлы в папку `debs/`.
+A GitHub Actions workflow (`.github/workflows/sync-deb.yml`) checks [GitHub-Legacy's releases](https://github.com/kitalev/GitHub-Legacy/releases) once a day and on manual trigger, pulls the latest `.deb`, and rebuilds the package index automatically — no manual steps needed for that package.
 
-Каждый `.deb` должен быть собран правильно (со своим `control` файлом внутри —
-`Package`, `Name`, `Version`, `Architecture: iphoneos-arm`, `Depends`, `Description` и т.д.).
-Если пакетов пока нет — просто оставьте `debs/` пустой, репозиторий будет валидным, но пустым.
-
-### 2. Настройте адрес
-Откройте `generate.sh` и замените строку
+To add any other `.deb` by hand:
 
 ```bash
-REPO_URL="https://ВАШ_ЛОГИН.github.io/ВАШ_РЕПОЗИТОРИЙ"
-```
-
-на реальный адрес, где будет лежать репозиторий (см. шаг 4).
-
-### 3. Соберите индекс
-```bash
+cp your-package.deb debs/
 bash generate.sh
+git add .
+git commit -m "Add your-package"
+git push
 ```
-Скрипт создаст `Packages`, `Packages.gz`, `Packages.bz2`, `Release` и
-`packages.json` на основе того, что лежит в `debs/`. Запускайте его заново
-каждый раз, когда добавляете/убираете/обновляете пакеты — `index.html`
-берёт список пакетов именно из `packages.json`.
 
-### 4. Опубликуйте на GitHub Pages
-1. Создайте новый публичный репозиторий на GitHub, например `my-cydia-repo`.
-2. Загрузите туда всю содержимое папки `cydia-repo/` (включая `debs/`).
-3. В настройках репозитория → **Settings → Pages** → Source: `main` branch, `/ (root)`.
-4. Через пару минут репозиторий будет доступен по адресу вида:
-   `https://ваш_логин.github.io/my-cydia-repo/`
-5. Это и есть `REPO_URL` — используйте именно этот адрес в Cydia
-   (Manage → Sources → Edit → Add, вставить ссылку).
+## Requirements
 
-### 5. (Опционально) Иконка
-Добавьте файл `CydiaIcon.png` (128×128, PNG) в корень репозитория —
-Cydia покажет его вместо стандартной иконки.
-
-## Веб-страница репозитория (index.html)
-
-На `https://ваш_логин.github.io/my-cydia-repo/` открывается `index.html` —
-страница в стиле iOS 6 с:
-
-- списком пакетов из `packages.json` (название, версия, размер, описание);
-- кнопкой **«Скачать»** у каждого пакета — тянет `.deb` напрямую из `debs/`;
-- большой кнопкой **«Добавить в Cydia»** вверху страницы.
-
-Адрес репозитория страница определяет сама — из своего же URL, поэтому
-ничего вручную прописывать не нужно, даже если вы переименуете GitHub-репозиторий.
-
-### Как работает кнопка «Добавить в Cydia»
-
-Кнопка — это ссылка вида `cydia://url/https://ваш_логин.github.io/my-cydia-repo/`.
-Такие ссылки с схемой `cydia://` умеет открывать сама Cydia на джейлбрейкнутом
-устройстве: iOS перехватывает переход и вместо открытия страницы запускает
-Cydia с предложением добавить источник.
-
-**Как проверить на iPhone:**
-1. Откройте `https://ваш_логин.github.io/my-cydia-repo/` в **Safari** на устройстве.
-2. Нажмите «Добавить в Cydia».
-3. Откроется Cydia с диалогом добавления источника — подтвердите.
-
-Если Cydia не установлена или устройство не джейлбрейкнуто, ссылка просто
-ничего не сделает (Safari не знает такую схему) — это ожидаемо.
-Ручной способ (запасной) тоже есть на странице, под кнопкой.
-
-## Важно про iOS 6 / Cydia
-
-- Устройство на iOS 6 должно быть джейлбрейкнуто, чтобы вообще открывать Cydia.
-- Пакеты должны быть собраны под архитектуру `iphoneos-arm` и совместимы со старыми
-  версиями iOS/Cydia (32-битные бинарники).
-- GitHub Pages отдаёт файлы по HTTPS — это нормально, Cydia прекрасно работает
-  через https-источники.
-
-## Если нужна помощь дальше
-
-Пришлите свои `.deb` файлы или контрол-файлы (`control`) — помогу проверить их
-корректность или собрать пакет с нуля.
+- Device must be jailbroken to use Cydia/Sileo at all.
+- Packages must be built for `iphoneos-arm` (32-bit) to run on iOS 6.
