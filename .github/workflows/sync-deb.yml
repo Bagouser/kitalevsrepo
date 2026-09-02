@@ -1,0 +1,52 @@
+name: Sync .deb from GitHub-Legacy releases
+
+on:
+  workflow_dispatch:      # ручной запуск кнопкой во вкладке Actions
+  schedule:
+    - cron: '0 6 * * *'   # плюс проверка раз в сутки, в 06:00 UTC — можно убрать, если хотите только вручную
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch latest .deb URL from GitHub-Legacy
+        id: latest
+        run: |
+          set -euo pipefail
+          URL=$(curl -sL https://api.github.com/repos/kitalev/GitHub-Legacy/releases/latest \
+            | grep '"browser_download_url"' \
+            | grep '\.deb"' \
+            | head -n1 \
+            | cut -d '"' -f 4)
+          if [ -z "$URL" ]; then
+            echo "No .deb asset found in latest release, aborting."
+            exit 1
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Download and replace .deb
+        run: |
+          set -euo pipefail
+          mkdir -p debs
+          rm -f debs/*.deb
+          curl -sL -o "debs/$(basename "${{ steps.latest.outputs.url }}")" "${{ steps.latest.outputs.url }}"
+
+      - name: Regenerate Packages index
+        run: bash generate.sh
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add debs Packages Packages.gz Packages.bz2 Release packages.json
+          if git diff --cached --quiet; then
+            echo "Nothing changed - already up to date."
+          else
+            git commit -m "Sync latest .deb from GitHub-Legacy"
+            git push
+          fi
