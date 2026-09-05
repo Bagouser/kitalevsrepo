@@ -1,0 +1,17 @@
+Package: com.githublegacy.app
+Name: GitHub Legacy
+Description: A lightweight GitHub client for iOS 6+ devices - browse repositories, read READMEs, and download releases.
+Maintainer: kitalev
+Author: kitalev
+Section: Applications
+Depends: firmware (>= 6.0)
+Icon: file:///Applications/GitHubLegacy.app/Icon-72@2x.png
+Architecture: iphoneos-arm
+Version: 1.0
+Installed-Size: 736
+Filename: debs/com.githublegacy.app_1.0_iphoneos-arm.deb
+Size: 303358
+MD5sum: 2908a172cdd6847a05ce2e0f67b5bc65
+SHA1: fe868bc4acca21dd25d799455666d19fd688cd82
+SHA256: 21d16b6cc50adfad4eea465d651acd508c604c39c6d4b8e69c62498ebce94abe
+
