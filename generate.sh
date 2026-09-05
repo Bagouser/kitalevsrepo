@@ -61,8 +61,8 @@ bzip2 -kf "$OUT_PACKAGES"
 
 # Release файл с метаданными репозитория
 cat > Release <<EOF
-Origin: My Repo
-Label: My Repo
+Origin: Kitalev's Repo
+Label: Kitalev's Repo
 Suite: stable
 Version: 1.0
 Codename: ios
